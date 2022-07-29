@@ -1,8 +1,8 @@
 (function() {
-  var LAST_PAGE = parseInt(sessionStorage.getItem("LFpage"));
+  var LAST_PAGE = parseInt(sessionStorage.getItem("LFpage")) || 1;
 
   function loadNextPage(current) {
-    window.location.href = `/user/clarabell02/library?page=${current + 1}`
+    window.location.href = `/user/clarabell02/library?page=${current + 1}`;
   }
 
   setTimeout(() => {
@@ -11,7 +11,7 @@
     if (!window.location.search) {
       // there's no ?page=
       console.log("LASTFM-SCRIPT no query param");
-      loadNextPage(LAST_PAGE + 1);
+      loadNextPage(LAST_PAGE);
     } else {
       var currentPage = parseInt(window.location.search.split('=')[1]);
 
@@ -22,7 +22,7 @@
 
       if (currentPage - 1 != LAST_PAGE) {
         console.log("LASTFM-SCRIPT wrong page");
-        loadNextPage(LAST_PAGE + 1);
+        loadNextPage(LAST_PAGE);
       }
     }
 
@@ -36,7 +36,7 @@
       return nameElement && nameElement.textContent.replace(/\s+/g, ' ').trim();
     });
 
-    names.forEach(function (name, i) {
+    names.forEach((name, i) => {
       if (name !== names[i + 1]) return;
       var deleteButton = elements[i].querySelector('[data-ajax-form-sets-state="deleted"]');
       if (deleteButton) deleteButton.click();
@@ -44,7 +44,7 @@
     })
 
     if (count > 0) {
-      var newCount = count + parseInt(sessionStorage.getItem("duplicate_count"));
+      var newCount = count + (parseInt(sessionStorage.getItem("duplicate_count")) || 0);
       sessionStorage.setItem("duplicate_count", newCount);
 
       console.log(`LASTFM-SCRIPT success, ${newCount} total removed, reloading`);
